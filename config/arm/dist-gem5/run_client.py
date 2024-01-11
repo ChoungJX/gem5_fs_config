@@ -71,10 +71,10 @@ kernel_path = "/home/linfeng/.cache/gem5/arm64-linux-kernel-5.4.49"
 system_image_path = "/home/linfeng/work/arm64-ubuntu-focal-server.img"
 checkpoint_path = f"m5out/mini/node{parser.parse_args().number}/cpt.1000000000000"
 
-readfile_path = f"fs_config/data/script/mini-redis/client_{parser.parse_args().number}"  # for m5 readfile
+readfile_path = f"gem5_fs_config/data/script/mini-redis/client_{parser.parse_args().number}"  # for m5 readfile
 binary_path = "/home/linfeng/bin/mini_redis_arm/mini-redis-cli" # your workload
-init_script = "fs_config/data/script/mini-redis/client_init.sh" # this script would be executed once the system booted
-level2_script = f"fs_config/data/script/s_client_{parser.parse_args().number}.sh" # we use the init_script to trigger the level2_script so that we can execute arbitrary script from a checkpoint
+init_script = "gem5_fs_config/data/script/mini-redis/client_init.sh" # this script would be executed once the system booted
+level2_script = f"gem5_fs_config/data/script/s_client_{parser.parse_args().number}.sh" # we use the init_script to trigger the level2_script so that we can execute arbitrary script from a checkpoint
 # =================================================================
 
 
