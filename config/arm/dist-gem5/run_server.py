@@ -86,7 +86,7 @@ class TunedCore(BaseCPUCore):
 
 
 processor = SwitchableProcessor(
-    starting_cores="boot",
+    starting_cores="OoO",
     switchable_cores={
         "boot": [
             SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=0, isa=ISA.ARM)
@@ -152,8 +152,8 @@ board.etherlink = DistEtherLink(
 
 board.etherlink.int0 = Parent.board.ethernet.interface
 
-board.set_mem_mode(MemMode.ATOMIC_NONCACHING)
-# board.set_mem_mode(MemMode.TIMING)
+# board.set_mem_mode(MemMode.ATOMIC_NONCACHING)
+board.set_mem_mode(MemMode.TIMING)
 
 shutil.copy(Path(init_script), Path(readfile_path))
 
@@ -210,6 +210,12 @@ def save_checkpoint_generator():
 def test():
     sys.exit(0)
 
+def start_boot():
+    print("Start to boot system...")
+    processor.switch_to_processor("boot")
+    board.set_mem_mode(MemMode.ATOMIC_NONCACHING)
+
+
 simulator = Simulator(
     board=board,
     full_system=True,
@@ -222,6 +228,7 @@ simulator = Simulator(
             func() for func in [save_checkpoint_generator]
         ),
         ExitEvent.EXIT: (func() for func in [test]),
+        ExitEvent.USER_INTERRUPT: (func() for func in [start_boot])
     },
 )
 

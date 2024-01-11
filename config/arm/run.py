@@ -82,7 +82,7 @@ class TunedCore(BaseCPUCore):
 
 
 processor = SwitchableProcessor(
-    starting_cores="boot",
+    starting_cores="OoO",
     switchable_cores={
         "boot": [SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=0, isa=ISA.ARM)],
         "OoO": [
@@ -112,6 +112,8 @@ processor = SwitchableProcessor(
 release = ArmDefaultRelease()
 platform = VExpress_GEM5_Foundation()
 
+cache_hierarchy = ThreeLevelCacheHierarchy()
+
 
 from gem5.components.boards.arm_board import ArmBoard
 
@@ -120,15 +122,15 @@ board = ArmBoard(
     processor=processor,
     # processor=SkylakeProcessor(),
     memory=memory,
-    cache_hierarchy=ThreeLevelCacheHierarchy(),
+    cache_hierarchy=cache_hierarchy,
     # cache_hierarchy=test_cache,
     release=release,
     platform=platform,
 )
 
 
-board.set_mem_mode(MemMode.ATOMIC_NONCACHING)
-# board.set_mem_mode(MemMode.TIMING)
+# board.set_mem_mode(MemMode.ATOMIC_NONCACHING)
+board.set_mem_mode(MemMode.TIMING)
 
 shutil.copy(Path(init_script), Path(readfile_path))
 
@@ -190,6 +192,11 @@ def save_checkpoint_generator():
 def test():
     sys.exit(0)
 
+def start_boot():
+    print("Start to boot system...")
+    processor.switch_to_processor("boot")
+    board.set_mem_mode(MemMode.ATOMIC_NONCACHING)
+
 
 simulator = Simulator(
     board=board,
@@ -201,7 +208,9 @@ simulator = Simulator(
         ExitEvent.WORKEND: (func() for func in [end_workload]),
         ExitEvent.CHECKPOINT: (func() for func in [save_checkpoint_generator]),
         ExitEvent.EXIT: (func() for func in [test]),
+        ExitEvent.USER_INTERRUPT: (func() for func in [start_boot])
     },
 )
+
 
 simulator.run()

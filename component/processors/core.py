@@ -196,6 +196,17 @@ class BranchPred(TAGE_SC_L_64KB):
     indirectBranchPred = IndirectPred()  # use NULL to disable
 
 
+class BTB(AssociativeBTB):
+    numEntries = "64kB"
+    assoc = 4
+
+
+class BPLTage(LTAGE):
+    instShiftAmt = 0
+    BTB = BTB()
+    requiresBTBHit = True
+
+
 depth = 3
 width = 4
 
@@ -203,7 +214,7 @@ width = 4
 class TunedCPU(DerivO3CPU):
     """Calibrated: configured to match the performance of hardware"""
 
-    branchPred = BranchPred()
+    branchPred = BPLTage()
 
     # Pipeline delays
     fetchToDecodeDelay = depth
@@ -244,4 +255,3 @@ class TunedCPU(DerivO3CPU):
     SQEntries = 56 * 2
     numPhysIntRegs = 270
     numPhysFloatRegs = 252
-

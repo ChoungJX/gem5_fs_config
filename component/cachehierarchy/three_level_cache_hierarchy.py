@@ -76,7 +76,7 @@ class ThreeLevelCacheHierarchy(AbstractClassicCacheHierarchy):
             self.iptw_caches[i].mem_side = self.l2XBars[i].cpu_side_ports
             self.dptw_caches[i].mem_side = self.l2XBars[i].cpu_side_ports
             self.l2caches[i].connectCPUSideBus(self.l2XBars[i])
-            self.l2caches[i].connectMemSideBus(self.l3XBar)
+            self.l2caches[i].connectMemSideBus(self.l3XBar)            
 
             cpu.connect_walker_ports(
                 self.iptw_caches[i].cpu_side, self.dptw_caches[i].cpu_side
@@ -93,6 +93,12 @@ class ThreeLevelCacheHierarchy(AbstractClassicCacheHierarchy):
             #     self.ptwXBar.cpu_side_ports, self.ptwXBar.cpu_side_ports
             # )
             # self.ptwcache.cpu_side = self.ptwXBar.mem_side_ports
+            self.l1icaches[i].prefetcher = FetchDirectedPrefetcher(
+                use_virtual_addresses=True,
+                # The FDP prefetcher needs to know to which CPU to listent to.
+                cpu=cpu.core,
+            )
+            self.l1icaches[i].prefetcher.registerMMU(cpu.core.mmu)
 
         # self.l2cache.connectCPUSideBus(self.l2XBar)
         # self.l2cache.connectMemSideBus(self.l3XBar)
