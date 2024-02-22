@@ -203,6 +203,8 @@ width = 4
 class TunedCPU(DerivO3CPU):
     """Calibrated: configured to match the performance of hardware"""
 
+    numThreads = 2
+
     branchPred = BranchPred()
 
     # Pipeline delays
@@ -244,4 +246,6 @@ class TunedCPU(DerivO3CPU):
     SQEntries = 56 * 2
     numPhysIntRegs = 270
     numPhysFloatRegs = 252
-
+    numPhysVecRegs = 164
+    numPhysVecPredRegs = 64
+    numPhysMatRegs = 4

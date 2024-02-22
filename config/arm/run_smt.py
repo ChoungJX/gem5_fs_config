@@ -109,20 +109,20 @@ class SkylakeProcessor(BaseCPUProcessor):
         super().__init__(cores=skylakecore)
 
 
-processor = SwitchableProcessor(
-    starting_cores="boot",
-    switchable_cores={
-        "boot": [SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=0, isa=ISA.ARM), SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=1, isa=ISA.ARM)],
-        "OoO": [
-            TunedCore(
-                cpu_type=CPUTypes.TIMING,
-                core_id=0,
-            )
-        ],
-    },
-)
+# processor = SwitchableProcessor(
+#     starting_cores="boot",
+#     switchable_cores={
+#         "boot": [SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=0, isa=ISA.ARM), SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=1, isa=ISA.ARM)],
+#         "OoO": [
+#             TunedCore(
+#                 cpu_type=CPUTypes.TIMING,
+#                 core_id=0,
+#             )
+#         ],
+#     },
+# )
 
-# processor = SkylakeProcessor()
+processor = SkylakeProcessor()
 
 
 release = ArmDefaultRelease()
@@ -133,8 +133,8 @@ from gem5.components.boards.arm_board import ArmBoard
 
 board = ArmBoard(
     clk_freq="3GHz",
-    processor=processor,
-    # processor=SkylakeProcessor(),
+    # processor=processor,
+    processor=SkylakeProcessor(),
     memory=memory,
     cache_hierarchy=ThreeLevelCacheHierarchy(),
     # cache_hierarchy=test_cache,
@@ -143,8 +143,8 @@ board = ArmBoard(
 )
 
 
-board.set_mem_mode(MemMode.ATOMIC_NONCACHING)
-# board.set_mem_mode(MemMode.TIMING)
+# board.set_mem_mode(MemMode.ATOMIC_NONCACHING)
+board.set_mem_mode(MemMode.TIMING)
 
 shutil.copy(Path(init_script), Path(readfile_path))
 

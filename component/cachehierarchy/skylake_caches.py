@@ -96,7 +96,9 @@ class L1Cache(PrefetchCache):
 
 class L1ICache(L1Cache):
     """Simple L1 instruction cache with default values"""
-
+    size = "48KiB"
+    assoc = 12
+    
     def __init__(self):
         super().__init__()
 
