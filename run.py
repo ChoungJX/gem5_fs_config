@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Optional
 
 from cachehierarchy.three_level_cache_hierarchy import ThreeLevelCacheHierarchy
-from processors.core import TunedCPU
+from processors.corenoSMT import TunedCPU
 
 import m5
 from m5.objects import *
@@ -72,7 +72,7 @@ class TunedCore(BaseCPUCore):
 
 
 processor = SwitchableProcessor(
-    starting_cores="boot",
+    starting_cores="OoO",
     switchable_cores={
         "boot": [
             SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=0, isa=ISA.ARM),
@@ -105,7 +105,11 @@ class SkylakeProcessor(BaseCPUProcessor):
             TunedCore(
                 cpu_type=CPUTypes.TIMING,
                 core_id=0,
-            )
+            ),
+            TunedCore(
+                cpu_type=CPUTypes.TIMING,
+                core_id=1,
+            ),
         ]
 
         super().__init__(cores=skylakecore)
@@ -134,8 +138,8 @@ from gem5.components.boards.arm_board import ArmBoard
 
 board = ArmBoard(
     clk_freq="3GHz",
-    processor=processor,
-    # processor=SkylakeProcessor(),
+    # processor=processor,
+    processor=SkylakeProcessor(),
     memory=memory,
     cache_hierarchy=ThreeLevelCacheHierarchy(),
     # cache_hierarchy=test_cache,

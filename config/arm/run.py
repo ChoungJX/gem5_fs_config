@@ -15,7 +15,7 @@ import shutil
 from component.cachehierarchy.three_level_cache_hierarchy import (
     ThreeLevelCacheHierarchy,
 )
-from component.processors.core import TunedCPU
+from component.processors.core_noSMT import TunedCPU
 
 from gem5.components.boards.mem_mode import MemMode
 from gem5.components.memory import DualChannelDDR4_2400
@@ -103,6 +103,10 @@ class SkylakeProcessor(BaseCPUProcessor):
             TunedCore(
                 cpu_type=CPUTypes.TIMING,
                 core_id=0,
+            ),
+            TunedCore(
+                cpu_type=CPUTypes.TIMING,
+                core_id=1,
             )
         ]
 
@@ -133,8 +137,8 @@ from gem5.components.boards.arm_board import ArmBoard
 
 board = ArmBoard(
     clk_freq="3GHz",
-    processor=processor,
-    # processor=SkylakeProcessor(),
+    # processor=processor,
+    processor=SkylakeProcessor(),
     memory=memory,
     cache_hierarchy=ThreeLevelCacheHierarchy(),
     # cache_hierarchy=test_cache,
@@ -143,8 +147,8 @@ board = ArmBoard(
 )
 
 
-board.set_mem_mode(MemMode.ATOMIC_NONCACHING)
-# board.set_mem_mode(MemMode.TIMING)
+# board.set_mem_mode(MemMode.ATOMIC_NONCACHING)
+board.set_mem_mode(MemMode.TIMING)
 
 shutil.copy(Path(init_script), Path(readfile_path))
 

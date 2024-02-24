@@ -205,7 +205,7 @@ def save_checkpoint_generator():
 
 
 def test():
-    # sys.exit(0)
+    sys.exit(0)
     print("end")
 
 
@@ -219,7 +219,7 @@ simulator = Simulator(
         ExitEvent.WORKEND: (func() for func in [end_workload]),
         ExitEvent.CHECKPOINT: (func() for func in [save_checkpoint_generator]),
         ExitEvent.EXIT: (func() for func in [test]),
-        ExitEvent.USER_INTERRUPT: (func() for func in [])
+        ExitEvent.USER_INTERRUPT: (func() for func in [test])
     },
 )
 
