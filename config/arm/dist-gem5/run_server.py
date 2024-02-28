@@ -13,7 +13,7 @@ addToPath("../../../")
 from component.cachehierarchy.three_level_cache_hierarchy import (
     ThreeLevelCacheHierarchy,
 )
-from component.processors.core import TunedCPU
+from component.processors.coreWithSMT import TunedCPU
 
 from gem5.components.boards.mem_mode import MemMode
 from gem5.components.memory import DualChannelDDR4_2400

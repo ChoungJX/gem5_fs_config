@@ -15,7 +15,7 @@ import shutil
 from component.cachehierarchy.three_level_cache_hierarchy import (
     ThreeLevelCacheHierarchy,
 )
-from component.processors.core import TunedCPU
+from component.processors.coreWithSMT import TunedCPU
 
 from gem5.components.boards.mem_mode import MemMode
 from gem5.components.memory import DualChannelDDR4_2400
@@ -103,7 +103,11 @@ class SkylakeProcessor(BaseCPUProcessor):
             TunedCore(
                 cpu_type=CPUTypes.TIMING,
                 core_id=0,
-            )
+            ),
+            # TunedCore(
+            #     cpu_type=CPUTypes.TIMING,
+            #     core_id=2,
+            # )
         ]
 
         super().__init__(cores=skylakecore)
