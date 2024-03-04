@@ -13,7 +13,7 @@ addToPath("../../../")
 from component.cachehierarchy.three_level_cache_hierarchy import (
     ThreeLevelCacheHierarchy,
 )
-from component.processors.coreWithSMT import TunedCPU
+from component.processors.core import TunedCPU
 
 from gem5.components.boards.mem_mode import MemMode
 from gem5.components.memory import DualChannelDDR4_2400
@@ -110,18 +110,18 @@ processor = SwitchableProcessor(
 )
 
 
-# class SkylakeProcessor(BaseCPUProcessor):
+class SkylakeProcessor(BaseCPUProcessor):
 
-#     def __init__(self):
-#         self._cpu_type = CPUTypes.O3
-#         skylakecore = [
-#             TunedCore(
-#                 cpu_type=CPUTypes.TIMING,
-#                 core_id=0,
-#             )
-#         ]
+    def __init__(self):
+        self._cpu_type = CPUTypes.O3
+        skylakecore = [
+            TunedCore(
+                cpu_type=CPUTypes.TIMING,
+                core_id=0,
+            )
+        ]
 
-#         super().__init__(cores=skylakecore)
+        super().__init__(cores=skylakecore)
 
 
 release = ArmDefaultRelease()

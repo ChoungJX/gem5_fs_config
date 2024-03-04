@@ -57,7 +57,7 @@ print("=======================================================")
 bootloader_path = "/home/linfeng/.cache/gem5/arm64-bootloader-foundation"
 kernel_path = "/home/linfeng/.cache/gem5/arm64-linux-kernel-5.4.49"
 system_image_path = "/home/linfeng/work/arm64-ubuntu-focal-server.img"
-checkpoint_path = "m5out/test/node1/cpt.324854903584"
+checkpoint_path = "m5out/miniserver/cpt.1000000000000"
 
 readfile_path = "gem5_fs_config/data/readfile"  # for m5 readfile
 binary_path = "/home/linfeng/bin/async_test_release"  # your workload

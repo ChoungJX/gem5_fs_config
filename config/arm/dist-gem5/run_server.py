@@ -85,21 +85,21 @@ class TunedCore(BaseCPUCore):
         return self._cpu_type
 
 
-processor = SwitchableProcessor(
-    starting_cores="boot",
-    switchable_cores={
-        "boot": [
-            SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=0, isa=ISA.ARM)
-        ],
-        "OoO": [
+class SkylakeProcessor(BaseCPUProcessor):
+    def __init__(self):
+        self._cpu_type = CPUTypes.O3
+        skylakecore = [
             TunedCore(
                 cpu_type=CPUTypes.TIMING,
                 core_id=0,
-            )
-        ],
-    },
-)
+            ),
+            # TunedCore(
+            #     cpu_type=CPUTypes.TIMING,
+            #     core_id=2,
+            # )
+        ]
 
+        super().__init__(cores=skylakecore)
 
 # class SkylakeProcessor(BaseCPUProcessor):
 
@@ -122,8 +122,8 @@ platform = VExpress_GEM5_Foundation()
 from gem5.components.boards.arm_board import ArmBoard
 board = ArmBoard(
     clk_freq="3GHz",
-    processor=processor,
-    # processor=SkylakeProcessor(),
+    # processor=processor,
+    processor=SkylakeProcessor(),
     memory=memory,
     cache_hierarchy=ThreeLevelCacheHierarchy(),
     # cache_hierarchy=test_cache,
@@ -196,8 +196,9 @@ def boot_workload():
 
 def begin_workload():
     print("Start to boot workload...")
-    processor.switch_to_processor("OoO")
-    board.set_mem_mode(MemMode.TIMING)
+    # processor.switch_to_processor("OoO")
+    # board.set_mem_mode(MemMode.TIMING)
+    m5.stats.reset()
 
 
 def end_workload():
