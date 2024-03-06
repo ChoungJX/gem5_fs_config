@@ -211,6 +211,9 @@ def save_checkpoint_generator():
 def test():
     sys.exit(0)
 
+def reset_stats():
+    m5.stats.reset()
+
 simulator = Simulator(
     board=board,
     full_system=True,
@@ -222,7 +225,7 @@ simulator = Simulator(
         ExitEvent.CHECKPOINT: (
             func() for func in [save_checkpoint_generator]
         ),
-        ExitEvent.EXIT: (func() for func in [test]),
+        ExitEvent.EXIT: (func() for func in [reset_stats, test]),
     },
 )
 
