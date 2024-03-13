@@ -63,7 +63,7 @@ system_image_path = "/home/linfeng/work/arm64-ubuntu-focal-server.img"
 checkpoint_path = "m5out/mini/minis_all_free_detailed/cpt.1000000000000"
 
 readfile_path = "gem5_fs_config/data/script/mini-redis/server"  # for m5 readfile
-binary_path = "/home/linfeng/bin/tfb-server"  # your workload
+binary_path = "/home/linfeng/bin/web-test"  # your workload
 init_script = "gem5_fs_config/data/web/init_server.sh"  # this script would be executed once the system booted
 level2_script = "gem5_fs_config/data/script/s_server.sh"  # we use the init_script to trigger the level2_script so that we can execute arbitrary script from a checkpoint
 # =================================================================

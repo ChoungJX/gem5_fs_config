@@ -9,8 +9,10 @@ sleep 1
 m5 readfile > /tmp/workload
 chmod 755 /tmp/workload
 
-m5 workbegin
-sleep 1
-m5 readfile > /tmp/run.sh
-chmod 755 /tmp/run.sh
-/tmp/run.sh
+/bin/hostname server0
+/sbin/ifconfig eth0 hw ether 00:90:00:00:00:04
+/sbin/ifconfig eth0 192.168.0.4
+/sbin/ifconfig -a
+echo "finish"
+
+/tmp/workload

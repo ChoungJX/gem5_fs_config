@@ -9,7 +9,7 @@ chmod 755 /tmp/workload
 /sbin/ifconfig eth0 192.168.0.6 netmask 255.255.255.0 up
 /sbin/ifconfig -a
 
-sleep 5
 echo "finish"
-sleep 1000
-curl http://192.168.0.4:8080/fortunes
+sleep 3
+curl http://192.168.0.4:3000
+/tmp/workload -t1 -c100 -d5s http://192.168.0.4:3000
