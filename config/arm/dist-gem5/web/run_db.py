@@ -138,7 +138,7 @@ board.realview.attachPciDevice(
 
 
 board.etherlink = DistEtherLink(
-    dist_rank=1,
+    dist_rank=2,
     dist_size=3,
     server_port=2200,
     sync_start="1000000000000t",

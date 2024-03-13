@@ -74,10 +74,8 @@ checkpoint_path = (
 )
 
 readfile_path = f"gem5_fs_config/data/script/mini-redis/client_{parser.parse_args().number}"  # for m5 readfile
-binary_path = (
-    "/home/linfeng/bin/mini_redis_arm/mini-redis-cli"  # your workload
-)
-init_script = "gem5_fs_config/data/init_fast2.sh"  # this script would be executed once the system booted
+binary_path = "/home/linfeng/bin/wrk"  # your workload
+init_script = "gem5_fs_config/data/web/init_client.sh"  # this script would be executed once the system booted
 level2_script = f"gem5_fs_config/data/script/s_client_{parser.parse_args().number}.sh"  # we use the init_script to trigger the level2_script so that we can execute arbitrary script from a checkpoint
 # =================================================================
 
@@ -150,7 +148,7 @@ board.realview.attachPciDevice(
 
 
 board.etherlink = DistEtherLink(
-    dist_rank=2,
+    dist_rank=1,
     dist_size=3,
     server_port=2200,
     sync_start="1000000000000t",
