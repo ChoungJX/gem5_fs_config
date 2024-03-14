@@ -204,7 +204,7 @@ class TunedCPU(DerivO3CPU):
     """Calibrated: configured to match the performance of hardware"""
 
     numThreads = 2
-    # smtFetchPolicy = 'IQCount'
+    smtFetchPolicy = 'IQCount'
     smtCommitPolicy = 'OldestReady'
 
     branchPred = BranchPred()

@@ -151,10 +151,10 @@ board.etherlink = DistEtherLink(
     dist_rank=1,
     dist_size=3,
     server_port=2200,
-    sync_start="1000000000000t",
+    sync_start="10t",
     sync_repeat="10us",
-    delay="20us",
-    delay_var="5us",
+    delay="5ms",
+    delay_var="1ms",
     num_nodes=3,
 )
 

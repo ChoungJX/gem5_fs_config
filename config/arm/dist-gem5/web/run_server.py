@@ -63,7 +63,7 @@ system_image_path = "/home/linfeng/work/arm64-ubuntu-focal-server.img"
 checkpoint_path = "m5out/mini/minis_all_free_detailed/cpt.1000000000000"
 
 readfile_path = "gem5_fs_config/data/script/mini-redis/server"  # for m5 readfile
-binary_path = "/home/linfeng/bin/web-test"  # your workload
+binary_path = "/home/linfeng/bin/web-test-114514191981"  # your workload
 init_script = "gem5_fs_config/data/web/init_server.sh"  # this script would be executed once the system booted
 level2_script = "gem5_fs_config/data/script/s_server.sh"  # we use the init_script to trigger the level2_script so that we can execute arbitrary script from a checkpoint
 # =================================================================
@@ -120,8 +120,8 @@ from gem5.components.boards.arm_board import ArmBoard
 
 board = ArmBoard(
     clk_freq="3GHz",
-    processor=processor,
-    # processor=SkylakeProcessor(),
+    # processor=processor,
+    processor=SkylakeProcessor(),
     memory=memory,
     cache_hierarchy=ThreeLevelCacheHierarchy(),
     # cache_hierarchy=test_cache,
@@ -141,17 +141,17 @@ board.etherlink = DistEtherLink(
     dist_rank=0,
     dist_size=3,
     server_port=2200,
-    sync_start="1000000000000t",
+    sync_start="10t",
     sync_repeat="10us",
-    delay="20us",
-    delay_var="5us",
+    delay="5ms",
+    delay_var="1ms",
     num_nodes=3,
 )
 
 board.etherlink.int0 = Parent.board.ethernet.interface
 
-board.set_mem_mode(MemMode.ATOMIC_NONCACHING)
-# board.set_mem_mode(MemMode.TIMING)
+# board.set_mem_mode(MemMode.ATOMIC_NONCACHING)
+board.set_mem_mode(MemMode.TIMING)
 
 shutil.copy(Path(init_script), Path(readfile_path))
 
