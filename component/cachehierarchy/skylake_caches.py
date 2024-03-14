@@ -96,9 +96,18 @@ class L1Cache(PrefetchCache):
 
 class L1ICache(L1Cache):
     """Simple L1 instruction cache with default values"""
-    size = "48KiB"
+
     assoc = 12
-    
+    size = "48KiB"
+
+    # tag_latency = 1
+    # data_latency = 1
+    # response_latency = 1
+
+    # mshrs = 1280
+    # tgts_per_mshr = 160
+    # write_buffers = 560
+    # demand_mshr_reserve = 960
     def __init__(self):
         super().__init__()
 

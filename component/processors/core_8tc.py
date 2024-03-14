@@ -203,7 +203,9 @@ width = 4
 class TunedCPU(DerivO3CPU):
     """Calibrated: configured to match the performance of hardware"""
 
-    numThreads = 1
+    numThreads = 8
+    smtFetchPolicy = 'IQCount'
+    smtCommitPolicy = 'OldestReady'
 
     branchPred = BranchPred()
 
@@ -244,8 +246,8 @@ class TunedCPU(DerivO3CPU):
     numIQEntries = 146
     LQEntries = 72 * 2
     SQEntries = 56 * 2
-    numPhysIntRegs = 270
-    numPhysFloatRegs = 252
-    numPhysVecRegs = 164
-    numPhysVecPredRegs = 64
-    numPhysMatRegs = 4
+    numPhysIntRegs = 270 * 2
+    numPhysFloatRegs = 252 * 2
+    numPhysVecRegs = 82 * numThreads
+    numPhysVecPredRegs = 32 * numThreads
+    numPhysMatRegs = 2 * numThreads

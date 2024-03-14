@@ -28,19 +28,19 @@ for i in range(20):
         # wFile.write(f"ping -c 3 192.168.0.4;sleep 3;\n")
         
 
-        for j in range(2):
+        for j in range(10):
             g_key = generate_random_string(32)
             g_value = generate_random_string(32)
             uuid_pools[g_key] = g_value
             wFile.write(f"/tmp/workload --hostname 192.168.0.4 set {g_key} {g_value}\n")
         
-        for j in range(3):
+        for j in range(10):
             g_key = generate_random_string(32)
             g_value = generate_random_string(640)
             uuid_pools[g_key] = g_value
             wFile.write(f"/tmp/workload --hostname 192.168.0.4 set {g_key} {g_value}\n")
 
-        for j in range(10):
+        for j in range(100):
             pick_list = list(uuid_pools.keys())
             wFile.write(f"/tmp/workload --hostname 192.168.0.4 get {random.choice(pick_list)}\n")
         

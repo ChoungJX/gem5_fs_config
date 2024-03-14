@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# m5 checkpoint 1
-# sleep 2
+m5 checkpoint 1
+sleep 2
 
 m5 workbegin
 sleep 1
