@@ -63,7 +63,7 @@ system_image_path = "/home/linfeng/work/arm64-ubuntu-focal-server.img"
 checkpoint_path = "m5out/mini/minis_all_free_detailed/cpt.1000000000000"
 
 readfile_path = "gem5_fs_config/data/script/mini-redis/server"  # for m5 readfile
-binary_path = "/home/linfeng/bin/web-test-114514191981"  # your workload
+binary_path = "/home/linfeng/bin/web-test-1145141919810"  # your workload
 init_script = "gem5_fs_config/data/web/init_server.sh"  # this script would be executed once the system booted
 level2_script = "gem5_fs_config/data/script/s_server.sh"  # we use the init_script to trigger the level2_script so that we can execute arbitrary script from a checkpoint
 # =================================================================
@@ -143,8 +143,8 @@ board.etherlink = DistEtherLink(
     server_port=2200,
     sync_start="10t",
     sync_repeat="10us",
-    delay="5ms",
-    delay_var="1ms",
+    delay="20us",
+    delay_var="5us",
     num_nodes=3,
 )
 
@@ -216,6 +216,10 @@ def test():
     # sys.exit(0)
     print("aaa")
 
+def reset_stats():
+    print("****************Reset Statistic****************")
+    m5.stats.reset()
+
 
 simulator = Simulator(
     board=board,
@@ -227,6 +231,7 @@ simulator = Simulator(
         ExitEvent.WORKEND: (func() for func in [end_workload]),
         ExitEvent.CHECKPOINT: (func() for func in [save_checkpoint_generator]),
         ExitEvent.EXIT: (func() for func in [test]),
+        ExitEvent.USER_INTERRUPT: (func() for func in [reset_stats, reset_stats, reset_stats, reset_stats, reset_stats])
     },
 )
 
