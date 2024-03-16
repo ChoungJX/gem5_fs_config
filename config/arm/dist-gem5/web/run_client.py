@@ -103,7 +103,16 @@ class TunedCore(BaseCPUCore):
 processor = SwitchableProcessor(
     starting_cores="boot",
     switchable_cores={
-        "boot": [SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=0, isa=ISA.ARM)],
+        "boot": [
+            SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=0, isa=ISA.ARM),
+            SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=1, isa=ISA.ARM),
+            SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=2, isa=ISA.ARM),
+            SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=3, isa=ISA.ARM),
+            SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=4, isa=ISA.ARM),
+            SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=5, isa=ISA.ARM),
+            SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=6, isa=ISA.ARM),
+            SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=7, isa=ISA.ARM),
+        ],
         "OoO": [
             TunedCore(
                 cpu_type=CPUTypes.TIMING,

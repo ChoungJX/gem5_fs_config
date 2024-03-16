@@ -12,4 +12,4 @@ chmod 755 /tmp/workload;
 echo "finish";
 sleep 3;
 curl http://192.168.0.4:3000;
-/tmp/workload -t1 -c100 -d5s http://192.168.0.4:3000;
+/tmp/workload -t8 -c800 -d5s http://192.168.0.4:3000;
