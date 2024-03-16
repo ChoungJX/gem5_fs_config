@@ -34,8 +34,14 @@ from gem5.simulate.exit_event import ExitEvent
 from gem5.simulate.simulator import Simulator
 from gem5.utils.requires import requires
 
-parser = argparse.ArgumentParser(
-    description="For dist-gem5 full system simulation"
+parser = argparse.ArgumentParser(description="For dist-gem5 full system simulation")
+
+parser.add_argument(
+    "--numThreads",
+    default=1,
+    action="store",
+    type=int,
+    help="Rank of this system within the dist gem5 run.",
 )
 
 parser.add_argument(
@@ -49,6 +55,7 @@ parser.add_argument(
 
 print("=======================================================")
 print("show your args:")
+print("--numThreads:", parser.parse_args().numThreads)
 print("--checkpoint:", parser.parse_args().checkpoint)
 print("=======================================================")
 
@@ -72,19 +79,9 @@ memory = DualChannelDDR4_2400(size="2GB")
 
 
 class TunedCore(BaseCPUCore):
-    def __init__(self, cpu_type: CPUTypes, core_id):
-        super().__init__(core=TunedCPU(cpu_id=core_id), isa=ISA.ARM)
-
-        self._cpu_type = cpu_type
-
-    def get_type(self) -> CPUTypes:
-        return self._cpu_type
-
-
-class BootCore(BaseCPUCore):
-    def __init__(self, cpu_type: CPUTypes, core_id):
+    def __init__(self, cpu_type: CPUTypes, core_id, numThreads: int = 1):
         super().__init__(
-            core=DerivO3CPU(cpu_id=core_id, numThreads=2), isa=ISA.ARM
+            core=TunedCPU(cpu_id=core_id, numThreads=numThreads), isa=ISA.ARM
         )
 
         self._cpu_type = cpu_type
@@ -103,6 +100,7 @@ class SkylakeProcessor(BaseCPUProcessor):
             TunedCore(
                 cpu_type=CPUTypes.TIMING,
                 core_id=0,
+                numThreads=parser.parse_args().numThreads,
             ),
             # TunedCore(
             #     cpu_type=CPUTypes.TIMING,
@@ -223,7 +221,7 @@ simulator = Simulator(
         ExitEvent.WORKEND: (func() for func in [end_workload]),
         ExitEvent.CHECKPOINT: (func() for func in [save_checkpoint_generator]),
         ExitEvent.EXIT: (func() for func in [test]),
-        ExitEvent.USER_INTERRUPT: (func() for func in [test])
+        ExitEvent.USER_INTERRUPT: (func() for func in [test]),
     },
 )
 

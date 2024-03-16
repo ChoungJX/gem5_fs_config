@@ -15,7 +15,7 @@ import shutil
 from component.cachehierarchy.three_level_cache_hierarchy import (
     ThreeLevelCacheHierarchy,
 )
-from component.processors.core import TunedCPU
+from component.processors.coreWithSMT import TunedCPU
 
 from gem5.components.boards.mem_mode import MemMode
 from gem5.components.memory import DualChannelDDR4_2400
@@ -37,8 +37,22 @@ from gem5.utils.requires import requires
 
 # m5.disableAllListeners()
 
-parser = argparse.ArgumentParser(
-    description="For dist-gem5 full system simulation"
+parser = argparse.ArgumentParser(description="For dist-gem5 full system simulation")
+
+parser.add_argument(
+    "--numThreads",
+    default=1,
+    action="store",
+    type=int,
+    help="Rank of this system within the dist gem5 run.",
+)
+
+parser.add_argument(
+    "--distPort",
+    default=2200,
+    action="store",
+    type=int,
+    help="Rank of this system within the dist gem5 run.",
 )
 
 parser.add_argument(
@@ -52,6 +66,8 @@ parser.add_argument(
 
 print("=======================================================")
 print("show your args:")
+print("--numThreads:", parser.parse_args().numThreads)
+print("--distPort:", parser.parse_args().distPort)
 print("--checkpoint:", parser.parse_args().checkpoint)
 print("=======================================================")
 
@@ -75,8 +91,10 @@ memory = DualChannelDDR4_2400(size="2GB")
 
 
 class TunedCore(BaseCPUCore):
-    def __init__(self, cpu_type: CPUTypes, core_id):
-        super().__init__(core=TunedCPU(cpu_id=core_id), isa=ISA.ARM)
+    def __init__(self, cpu_type: CPUTypes, core_id, numThreads: int = 1):
+        super().__init__(
+            core=TunedCPU(cpu_id=core_id, numThreads=numThreads), isa=ISA.ARM
+        )
 
         self._cpu_type = cpu_type
 
@@ -106,6 +124,7 @@ class SkylakeProcessor(BaseCPUProcessor):
             TunedCore(
                 cpu_type=CPUTypes.TIMING,
                 core_id=0,
+                numThreads=parser.parse_args().numThreads,
             )
         ]
 
@@ -140,7 +159,7 @@ board.realview.attachPciDevice(
 board.etherlink = DistEtherLink(
     dist_rank=0,
     dist_size=3,
-    server_port=2200,
+    server_port=parser.parse_args().distPort,
     sync_start="10t",
     sync_repeat="10us",
     delay="20us",
@@ -216,6 +235,7 @@ def test():
     # sys.exit(0)
     print("aaa")
 
+
 def reset_stats():
     print("****************Reset Statistic****************")
     m5.stats.reset()
@@ -231,7 +251,16 @@ simulator = Simulator(
         ExitEvent.WORKEND: (func() for func in [end_workload]),
         ExitEvent.CHECKPOINT: (func() for func in [save_checkpoint_generator]),
         ExitEvent.EXIT: (func() for func in [test]),
-        ExitEvent.USER_INTERRUPT: (func() for func in [reset_stats, reset_stats, reset_stats, reset_stats, reset_stats])
+        ExitEvent.USER_INTERRUPT: (
+            func()
+            for func in [
+                reset_stats,
+                reset_stats,
+                reset_stats,
+                reset_stats,
+                reset_stats,
+            ]
+        ),
     },
 )
 

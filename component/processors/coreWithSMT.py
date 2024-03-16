@@ -202,52 +202,56 @@ width = 4
 
 class TunedCPU(DerivO3CPU):
     """Calibrated: configured to match the performance of hardware"""
+    
+    def __init__(self, cpu_id ,numThreads: int = 1):
+        super().__init__()
+        self.numThreads = numThreads
+        self.cpu_id = cpu_id
 
-    numThreads = 2
-    smtFetchPolicy = 'IQCount'
-    smtCommitPolicy = 'OldestReady'
+        self.smtFetchPolicy = 'IQCount'
+        self.smtCommitPolicy = 'OldestReady'
 
-    branchPred = BranchPred()
+        self.branchPred = BranchPred()
 
-    # Pipeline delays
-    fetchToDecodeDelay = depth
-    decodeToRenameDelay = 1
-    renameToIEWDelay = 3 * depth
-    issueToExecuteDelay = 1
-    iewToCommitDelay = 2 * depth
+        # Pipeline delays
+        self.fetchToDecodeDelay = depth
+        self.decodeToRenameDelay = 1
+        self.renameToIEWDelay = 3 * depth
+        self.issueToExecuteDelay = 1
+        self.iewToCommitDelay = 2 * depth
 
-    forwardComSize = 19
-    backComSize = 19
+        self.forwardComSize = 19
+        self.backComSize = 19
 
-    # Pipeline widths
-    fetchWidth = width * 2
-    decodeWidth = width * 2
-    renameWidth = 3 * width
-    issueWidth = 2 * width
-    dispatchWidth = 2 * width
-    wbWidth = 2 * width
-    commitWidth = 2 * width
-    squashWidth = 3 * width
+        # Pipeline widths
+        self.fetchWidth = width * 2
+        self.decodeWidth = width * 2
+        self.renameWidth = 3 * width
+        self.issueWidth = 2 * width
+        self.dispatchWidth = 2 * width
+        self.wbWidth = 2 * width
+        self.commitWidth = 2 * width
+        self.squashWidth = 3 * width
 
-    fuPool = ExecUnits()
-    # IntDiv()
-    fuPool.FUList[0].opList[1].opLat = 2
-    # IntMult()
-    fuPool.FUList[1].opList[1].opLat = 2
-    # Load
-    fuPool.FUList[2].count = 12
-    # store
-    fuPool.FUList[4].count = 12
-    fuPool.FUList[6].count = 3
+        self.fuPool = ExecUnits()
+        # IntDiv()
+        self.fuPool.FUList[0].opList[1].opLat = 2
+        # IntMult()
+        self.fuPool.FUList[1].opList[1].opLat = 2
+        # Load
+        self.fuPool.FUList[2].count = 12
+        # store
+        self.fuPool.FUList[4].count = 12
+        self.fuPool.FUList[6].count = 3
 
-    fetchBufferSize = 16
-    fetchQueueSize = 64
-    numROBEntries = 336
-    numIQEntries = 146
-    LQEntries = 72 * 2
-    SQEntries = 56 * 2
-    numPhysIntRegs = 270
-    numPhysFloatRegs = 252
-    numPhysVecRegs = 82 * numThreads
-    numPhysVecPredRegs = 32 * numThreads
-    numPhysMatRegs = 2 * numThreads
+        self.fetchBufferSize = 16
+        self.fetchQueueSize = 64
+        self.numROBEntries = 336
+        self.numIQEntries = 146
+        self.LQEntries = 72 * 2
+        self.SQEntries = 56 * 2
+        self.numPhysIntRegs = 270
+        self.numPhysFloatRegs = 252
+        self.numPhysVecRegs = 82 * numThreads
+        self.numPhysVecPredRegs = 32 * numThreads
+        self.numPhysMatRegs = 2 * numThreads
