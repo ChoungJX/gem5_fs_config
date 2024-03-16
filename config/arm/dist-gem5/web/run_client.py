@@ -37,13 +37,19 @@ from gem5.utils.requires import requires
 
 # m5.disableAllListeners()
 
-parser = argparse.ArgumentParser(
-    description="For dist-gem5 full system simulation"
-)
+parser = argparse.ArgumentParser(description="For dist-gem5 full system simulation")
 
 parser.add_argument(
     "--number",
     default=1,
+    action="store",
+    type=int,
+    help="Rank of this system within the dist gem5 run.",
+)
+
+parser.add_argument(
+    "--distPort",
+    default=2200,
     action="store",
     type=int,
     help="Rank of this system within the dist gem5 run.",
@@ -61,6 +67,7 @@ parser.add_argument(
 print("=======================================================")
 print("show your args:")
 print("--number:", parser.parse_args().number)
+print("--distPort:", parser.parse_args().distPort)
 print("--checkpoint:", parser.parse_args().checkpoint)
 print("=======================================================")
 
@@ -69,9 +76,7 @@ print("=======================================================")
 bootloader_path = "/home/linfeng/.cache/gem5/arm64-bootloader-foundation"
 kernel_path = "/home/linfeng/.cache/gem5/arm64-linux-kernel-5.4.49"
 system_image_path = "/home/linfeng/work/arm64-ubuntu-focal-server.img"
-checkpoint_path = (
-    f"m5out/mini/node{parser.parse_args().number}/cpt.1000000000000"
-)
+checkpoint_path = f"m5out/mini/node{parser.parse_args().number}/cpt.1000000000000"
 
 readfile_path = f"gem5_fs_config/data/script/mini-redis/client_{parser.parse_args().number}"  # for m5 readfile
 binary_path = "/home/linfeng/bin/wrk"  # your workload
@@ -150,7 +155,7 @@ board.realview.attachPciDevice(
 board.etherlink = DistEtherLink(
     dist_rank=1,
     dist_size=3,
-    server_port=2200,
+    server_port=parser.parse_args().distPort,
     sync_start="10t",
     sync_repeat="10us",
     delay="20us",
