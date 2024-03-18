@@ -78,7 +78,7 @@ kernel_path = "/home/linfeng/.cache/gem5/arm64-linux-kernel-5.4.49"
 system_image_path = "/home/linfeng/work/arm64-ubuntu-focal-server.img"
 checkpoint_path = f"m5out/mini/node{parser.parse_args().number}/cpt.1000000000000"
 
-readfile_path = f"gem5_fs_config/data/script/mini-redis/client_{parser.parse_args().number}"  # for m5 readfile
+readfile_path = f"gem5_fs_config/data/script/mini-redis/client_{parser.parse_args().distPort}"  # for m5 readfile
 binary_path = "/home/linfeng/bin/wrk"  # your workload
 init_script = "gem5_fs_config/data/web/init_client.sh"  # this script would be executed once the system booted
 level2_script = f"gem5_fs_config/data/script/s_client_{parser.parse_args().number}.sh"  # we use the init_script to trigger the level2_script so that we can execute arbitrary script from a checkpoint
@@ -106,17 +106,15 @@ processor = SwitchableProcessor(
         "boot": [
             SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=0, isa=ISA.ARM),
             SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=1, isa=ISA.ARM),
-            SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=2, isa=ISA.ARM),
-            SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=3, isa=ISA.ARM),
-            SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=4, isa=ISA.ARM),
-            SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=5, isa=ISA.ARM),
-            SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=6, isa=ISA.ARM),
-            SimpleCore(cpu_type=CPUTypes.ATOMIC, core_id=7, isa=ISA.ARM),
         ],
         "OoO": [
             TunedCore(
                 cpu_type=CPUTypes.TIMING,
                 core_id=0,
+            ),
+            TunedCore(
+                cpu_type=CPUTypes.TIMING,
+                core_id=1,
             )
         ],
     },
