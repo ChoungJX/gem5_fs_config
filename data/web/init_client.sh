@@ -9,7 +9,10 @@ chmod 755 /tmp/workload;
 /sbin/ifconfig eth0 192.168.0.6 netmask 255.255.255.0 up;
 /sbin/ifconfig -a;
 
-echo "finish";
+
 sleep 3;
 curl http://192.168.0.4:3000;
+echo "finished curl test";
+sleep 1;
+echo "start to run wrk";
 /tmp/workload -t8 -c800 -d5s http://192.168.0.4:3000;
