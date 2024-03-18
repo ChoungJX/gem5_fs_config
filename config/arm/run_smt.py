@@ -61,13 +61,13 @@ print("=======================================================")
 
 
 # =========================File Directory===========================
-bootloader_path = "/home/linfeng/.cache/gem5/arm64-bootloader-foundation"
-kernel_path = "/home/linfeng/.cache/gem5/arm64-linux-kernel-5.4.49"
-system_image_path = "/home/linfeng/work/arm64-ubuntu-focal-server.img"
+bootloader_path = "/home/jinlin/image/arm64-bootloader-foundation"
+kernel_path = "/home/jinlin/image/arm64-linux-kernel-5.4.49"
+system_image_path = "/home/jinlin/image/arm64-ubuntu-focal-server.img"
 checkpoint_path = "m5out/miniserver/cpt.1000000000000"
 
 readfile_path = "gem5_fs_config/data/readfile"  # for m5 readfile
-binary_path = "/home/linfeng/bin/async_test_release"  # your workload
+binary_path = "/home/jinlin/bin/async_test_release"  # your workload
 init_script = "gem5_fs_config/data/init_fast.sh"  # this script would be executed once the system booted
 level2_script = "gem5_fs_config/data/level2.sh"  # we use the init_script to trigger the level2_script so that we can execute arbitrary script from a checkpoint
 # =================================================================

@@ -250,8 +250,8 @@ class TunedCPU(DerivO3CPU):
         self.numIQEntries = 146
         self.LQEntries = 72 * 2
         self.SQEntries = 56 * 2
-        self.numPhysIntRegs = 270
-        self.numPhysFloatRegs = 252
+        self.numPhysIntRegs = 270 * 2
+        self.numPhysFloatRegs = 252 * 2
         self.numPhysVecRegs = 82 * numThreads
         self.numPhysVecPredRegs = 32 * numThreads
         self.numPhysMatRegs = 2 * numThreads
