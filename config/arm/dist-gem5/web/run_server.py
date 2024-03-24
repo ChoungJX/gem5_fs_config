@@ -35,7 +35,7 @@ from gem5.simulate.exit_event import ExitEvent
 from gem5.simulate.simulator import Simulator
 from gem5.utils.requires import requires
 
-# m5.disableAllListeners()
+m5.disableAllListeners()
 
 parser = argparse.ArgumentParser(description="For dist-gem5 full system simulation")
 
@@ -79,7 +79,8 @@ system_image_path = "/home/linfeng/work/arm64-ubuntu-focal-server.img"
 checkpoint_path = "m5out/mini/minis_all_free_detailed/cpt.1000000000000"
 
 readfile_path = f"gem5_fs_config/data/script/mini-redis/server_{parser.parse_args().distPort}" # for m5 readfile
-binary_path = "/home/linfeng/bin/web-test-1145141919810"  # your workload
+binary_path = "/home/linfeng/bin/test_db/web-test"  # your workload
+database_path = "/home/linfeng/bin/test_db/hello_world.db"  # your workload
 init_script = "gem5_fs_config/data/web/init_server.sh"  # this script would be executed once the system booted
 level2_script = "gem5_fs_config/data/script/s_server.sh"  # we use the init_script to trigger the level2_script so that we can execute arbitrary script from a checkpoint
 # =================================================================
@@ -158,13 +159,13 @@ board.realview.attachPciDevice(
 
 board.etherlink = DistEtherLink(
     dist_rank=0,
-    dist_size=3,
+    dist_size=2,
     server_port=parser.parse_args().distPort,
-    sync_start="10t",
+    sync_start="1000000000000t",
     sync_repeat="10us",
     delay="20us",
     delay_var="5us",
-    num_nodes=3,
+    num_nodes=2,
 )
 
 board.etherlink.int0 = Parent.board.ethernet.interface
@@ -207,6 +208,10 @@ def init_sys():
 
     shutil.copy(Path(binary_path), Path(readfile_path))
 
+def copy_database():
+    print("Loading database file")
+
+    shutil.copy(Path(database_path), Path(readfile_path))
 
 def boot_workload():
     print("Loading level2 script")
@@ -246,7 +251,7 @@ simulator = Simulator(
     full_system=True,
     on_exit_event={
         ExitEvent.WORKBEGIN: (
-            func() for func in [init_sys, boot_workload, begin_workload]
+            func() for func in [init_sys, copy_database ,boot_workload, begin_workload]
         ),
         ExitEvent.WORKEND: (func() for func in [end_workload]),
         ExitEvent.CHECKPOINT: (func() for func in [save_checkpoint_generator]),
