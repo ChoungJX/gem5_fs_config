@@ -2,6 +2,6 @@
 *~
 .*.swp
 .*.swo
-/data/readfile
+/data/readfile*
 /data/script/mini-redis
 s_client*

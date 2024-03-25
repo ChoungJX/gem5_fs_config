@@ -66,9 +66,10 @@ kernel_path = "/home/jinlin/image/arm64-linux-kernel-5.4.49"
 system_image_path = "/home/jinlin/image/arm64-ubuntu-focal-server.img"
 checkpoint_path = "m5out/miniserver/cpt.1000000000000"
 
-readfile_path = "gem5_fs_config/data/readfile"  # for m5 readfile
-binary_path = "/home/jinlin/bin/async_test_release"  # your workload
-init_script = "gem5_fs_config/data/init_fast.sh"  # this script would be executed once the system booted
+readfile_path = f"gem5_fs_config/data/readfile_{parser.parse_args().numThreads}"  # for m5 readfile
+server_bin_path = "/home/jinlin/bin/web-test-1145141919810"   # your workload
+client_bin_path = "/home/jinlin/bin/wrk"
+init_script = "gem5_fs_config/data/init_single.sh"  # this script would be executed once the system booted
 level2_script = "gem5_fs_config/data/level2.sh"  # we use the init_script to trigger the level2_script so that we can execute arbitrary script from a checkpoint
 # =================================================================
 
@@ -179,15 +180,15 @@ else:
 
 
 def init_sys():
-    print("Loading binary file")
+    print("Loading server binary file")
 
-    shutil.copy(Path(binary_path), Path(readfile_path))
+    shutil.copy(Path(server_bin_path), Path(readfile_path))
 
 
 def boot_workload():
-    print("Loading level2 script")
+    print("Loading client binary file")
 
-    shutil.copy(Path(level2_script), Path(readfile_path))
+    shutil.copy(Path(client_bin_path), Path(readfile_path))
 
 
 def begin_workload():
@@ -207,8 +208,8 @@ def save_checkpoint_generator():
 
 
 def test():
-    sys.exit(0)
     print("end")
+    sys.exit(0)
 
 
 simulator = Simulator(
