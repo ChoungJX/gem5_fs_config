@@ -208,8 +208,8 @@ class TunedCPU(DerivO3CPU):
         self.numThreads = numThreads
         self.cpu_id = cpu_id
 
-        # self.smtFetchPolicy = 'IQCount'
-        # self.smtCommitPolicy = 'OldestReady'
+        self.smtFetchPolicy = 'IQCount'
+        self.smtCommitPolicy = 'OldestReady'
 
         self.branchPred = BranchPred()
 

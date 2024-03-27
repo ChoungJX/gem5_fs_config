@@ -1,17 +1,21 @@
 #!/bin/bash
 
-sleep 1
-
+service haveged start
+# haveged -b 512
 m5 workbegin
-sleep 1
+
 echo "load workload binary"
 m5 readfile > /tmp/workload
 chmod 755 /tmp/workload
 
+echo "set server ip"
 /bin/hostname server0
 /sbin/ifconfig eth0 hw ether 00:90:00:00:00:04
 /sbin/ifconfig eth0 192.168.0.4
 /sbin/ifconfig -a
+
+echo "ping client test"
+ping 192.168.0.6 -c 3
 
 m5 workbegin
 echo "load database file"
