@@ -75,7 +75,7 @@ print("=======================================================")
 # =========================File Directory===========================
 bootloader_path = "/home/linfeng/.cache/gem5/arm64-bootloader-foundation"
 kernel_path = "/home/linfeng/.cache/gem5/arm64-linux-kernel-5.4.49"
-system_image_path = "/home/linfeng/work/arm64-ubuntu-focal-server.img"
+system_image_path = "/home/linfeng/work/arm64-ubuntu-focal-server-hav.img"
 checkpoint_path = f"m5out/mini/node{parser.parse_args().number}/cpt.1000000000000"
 
 readfile_path = f"gem5_fs_config/data/script/mini-redis/client_{parser.parse_args().distPort}"  # for m5 readfile
@@ -235,8 +235,8 @@ def save_checkpoint_generator():
 
 
 def test():
-    # sys.exit(0)
     print("aaa")
+    sys.exit(0)
 
 
 simulator = Simulator(
